@@ -1,9 +1,10 @@
-import styles from '../GameLayout.module.css';
+import styles from '../../GameLayout.module.css';
 import PropTypes from 'prop-types';
-import { useSelector } from '../redux-manager';
+import { useSelector } from 'react-redux';
+import { selectGetField } from '../../selectors/selectors';
 
 export const FieldLayout = ({ setGetFieldValue }) => {
-	const { getField } = useSelector();
+	const getField = useSelector(selectGetField);
 
 	return (
 		<div className={styles['container-button']}>

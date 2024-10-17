@@ -1,7 +1,7 @@
 import styles from './GameLayout.module.css';
-import { Field } from './components/Field';
-import { Information } from './components/Information ';
-import { useDispatch } from './redux-manager';
+import { Field } from './components/field/Field';
+import { Information } from './components/information/Information ';
+import { useDispatch } from 'react-redux';
 
 export const GameLayout = () => {
 	const dispatch = useDispatch();

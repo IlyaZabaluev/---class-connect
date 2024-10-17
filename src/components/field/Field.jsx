@@ -1,8 +1,16 @@
-import { FieldLayout } from './FieldLayout';
-import { useSelector, useDispatch } from '../redux-manager';
+import { FieldLayout } from '../field/FieldLayout';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+	selectGetField,
+	selectCurrentPlayer,
+	selectIsGameEnded,
+} from '../../selectors/selectors';
 
 export const Field = () => {
-	const { getField, currentPlayer, isGameEnded } = useSelector();
+	const getField = useSelector(selectGetField);
+	const currentPlayer = useSelector(selectCurrentPlayer);
+	const isGameEnded = useSelector(selectIsGameEnded);
+
 	const dispatch = useDispatch();
 
 	const WIN_PATTERNS = [
