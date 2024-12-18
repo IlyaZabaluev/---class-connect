@@ -1,19 +1,14 @@
+import { Component } from 'react';
+import { connect } from 'react-redux';
 import { FieldLayout } from '../field/FieldLayout';
-import { useSelector, useDispatch } from 'react-redux';
 import {
 	selectGetField,
 	selectCurrentPlayer,
 	selectIsGameEnded,
 } from '../../selectors/selectors';
 
-export const Field = () => {
-	const getField = useSelector(selectGetField);
-	const currentPlayer = useSelector(selectCurrentPlayer);
-	const isGameEnded = useSelector(selectIsGameEnded);
-
-	const dispatch = useDispatch();
-
-	const WIN_PATTERNS = [
+export class FieldContainer extends Component {
+	WIN_PATTERNS = [
 		[0, 1, 2],
 		[3, 4, 5],
 		[6, 7, 8],
@@ -24,7 +19,9 @@ export const Field = () => {
 		[2, 4, 6],
 	];
 
-	const setGetFieldValue = (i) => {
+	setGetFieldValue = (i) => {
+		const { isGameEnded, getField, currentPlayer, dispatch } = this.props;
+
 		if (isGameEnded === true) {
 			dispatch({ type: 'RESTART_GAME' });
 			return;
@@ -43,7 +40,7 @@ export const Field = () => {
 					payload: 'X',
 				});
 
-		for (let combination of WIN_PATTERNS) {
+		for (let combination of this.WIN_PATTERNS) {
 			const [a, b, c] = combination;
 			if (
 				getField[a] &&
@@ -54,5 +51,21 @@ export const Field = () => {
 			}
 		}
 	};
-	return <FieldLayout setGetFieldValue={setGetFieldValue} />;
-};
+
+	render() {
+		return (
+			<FieldLayout
+				setGetFieldValue={this.setGetFieldValue}
+				getField={this.props.getField}
+			/>
+		);
+	}
+}
+
+const mapStateToProps = (state) => ({
+	getField: selectGetField(state),
+	currentPlayer: selectCurrentPlayer(state),
+	isGameEnded: selectIsGameEnded(state),
+});
+
+export const Field = connect(mapStateToProps)(FieldContainer);

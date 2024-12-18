@@ -1,5 +1,6 @@
+import { Component } from 'react';
+import { connect } from 'react-redux';
 import { InformationLayout } from './InformationLayout';
-import { useSelector, useDispatch } from 'react-redux';
 import {
 	selectGetField,
 	selectCurrentPlayer,
@@ -7,29 +8,35 @@ import {
 	selectIsDraw,
 } from '../../selectors/selectors';
 
-export const Information = () => {
-	const getField = useSelector(selectGetField);
-	const currentPlayer = useSelector(selectCurrentPlayer);
-	const isGameEnded = useSelector(selectIsGameEnded);
-	const isDraw = useSelector(selectIsDraw);
-	const dispatch = useDispatch();
+export class InformationContainer extends Component {
+	render() {
+		const { isGameEnded, getField, currentPlayer, isDraw, dispatch } = this.props;
+		let inf = '';
+		const res = getField.includes('');
 
-	let inf = '';
-	const res = getField.includes('');
+		if (isGameEnded === true && res === false) {
+			dispatch({ type: 'SET_IS_DRAW', payload: true });
+		}
 
-	if (isGameEnded === true && res === false) {
-		dispatch({ type: 'SET_IS_DRAW', payload: true });
+		if (isDraw === false && isGameEnded === false) {
+			inf = `Ходит: ${currentPlayer}`;
+		} else if (isDraw === true) {
+			inf = 'Ничья';
+		} else if (isDraw === false && isGameEnded === true) {
+			inf = `Победа: ${currentPlayer}`;
+		} else {
+			inf = '';
+		}
+
+		return <InformationLayout inf={inf} />;
 	}
+}
 
-	if (isDraw === false && isGameEnded === false) {
-		inf = `Ходит: ${currentPlayer}`;
-	} else if (isDraw === true) {
-		inf = 'Ничья';
-	} else if (isDraw === false && isGameEnded === true) {
-		inf = `Победа: ${currentPlayer}`;
-	} else {
-		inf = '';
-	}
+const mapStateToProps = (state) => ({
+	getField: selectGetField(state),
+	currentPlayer: selectCurrentPlayer(state),
+	isGameEnded: selectIsGameEnded(state),
+	isDraw: selectIsDraw(state),
+});
 
-	return <InformationLayout inf={inf} />;
-};
+export const Information = connect(mapStateToProps)(InformationContainer);

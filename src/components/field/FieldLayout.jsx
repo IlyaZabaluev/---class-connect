@@ -1,22 +1,21 @@
-import styles from '../../GameLayout.module.css';
-import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
-import { selectGetField } from '../../selectors/selectors';
+import { Component } from 'react';
 
-export const FieldLayout = ({ setGetFieldValue }) => {
-	const getField = useSelector(selectGetField);
+export class FieldLayout extends Component {
+	render() {
+		const { getField, setGetFieldValue } = this.props;
 
-	return (
-		<div className={styles['container-button']}>
-			{getField.map((el, index) => (
-				<button onClick={() => setGetFieldValue(index)} key={index}>
-					{el ? el : '-'}
-				</button>
-			))}
-		</div>
-	);
-};
-
-FieldLayout.propTypes = {
-	setGetFieldValue: PropTypes.func,
-};
+		return (
+			<div className="m-8">
+				{getField.map((el, index) => (
+					<button
+						className="hover:opacity-50 m-3 w-12 h-12 p-2 border-2 border-lime-500 bg-gray-800 rounded-lg text-lime-500 font-bold text-lg"
+						onClick={() => setGetFieldValue(index)}
+						key={index}
+					>
+						{el ? el : '-'}
+					</button>
+				))}
+			</div>
+		);
+	}
+}
